@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Http\Requests\BookRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -39,13 +40,8 @@ class BookController extends Controller
      * @param Book $book
      * @return RedirectResponse
      */
-    public function update(Request $request, Book $book): RedirectResponse
+    public function update(BookRequest $request, Book $book): RedirectResponse
     {
-        $this->validate($request, [
-            'title'   => ['required', 'string'],
-            'price'    => ['required', 'numeric','min:0', 'not_in:0'],
-            'published'  => ['required', 'date'],
-        ]);
 
         $book->update($request->only(['title', 'price', 'published']));
 

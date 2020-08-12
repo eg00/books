@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Author;
+use App\Http\Requests\AuthorRequest;
 use Illuminate\Http\Request;
 
 class AuthorController extends Controller
@@ -37,12 +38,8 @@ class AuthorController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Author $author)
+    public function update(AuthorRequest $request, Author $author)
     {
-        $this->validate($request, [
-            'full_name' => 'required',
-        ]);
-
         $author->full_name = $request->full_name;
         $author->save();
 
