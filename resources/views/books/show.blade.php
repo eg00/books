@@ -24,25 +24,19 @@
                                    value="{{$book->published->format('d.m.Y')}}">
                         </div>
                         <div class="mb-3">
+                            <select class="form-select" name="authors[]" multiple aria-label="Authors">
+                                @foreach($authors as $author)
+                                <option value="{{$author->id}}"
+                                {{ in_array($author->full_name, $book->names)? 'selected' : ''}}
+                                >{{$author->full_name}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <button type="submit" class="btn btn-primary">{{__('Save')}}</button>
                         </div>
                     </form>
-                    {{--                        @if(count($book->authors)>0)--}}
-                    {{--                            <div class="row">--}}
-                    {{--                                <div class="col">--}}
-                    {{--                                    <h4>{{__('Books')}}:</h4>--}}
-                    {{--                                    <ul class="list-group">--}}
-                    {{--                                        @foreach($author->books as $book)--}}
-                    {{--                                            <li class="list-group-item">--}}
-                    {{--                                                {{$book->title}}--}}
-                    {{--                                                {{$book->price}}--}}
-                    {{--                                                {{$book->published}}--}}
-                    {{--                                            </li>--}}
-                    {{--                                        @endforeach--}}
-                    {{--                                    </ul>--}}
-                    {{--                                </div>--}}
-                    {{--                            </div>--}}
-                    {{--                        @endif--}}
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Author;
 use App\Book;
 use App\Http\Requests\BookRequest;
 use Illuminate\Http\RedirectResponse;
@@ -15,7 +16,7 @@ class BookController extends Controller
      *
      * @return Response
      */
-    public function index() : Response
+    public function index(): Response
     {
         $books = Book::paginate();
         return response()->view('books.index', compact('books'));
@@ -29,7 +30,8 @@ class BookController extends Controller
      */
     public function show(Book $book): Response
     {
-        return response()->view('books.show', compact('book'));
+        $authors = Author::all();
+        return response()->view('books.show', compact('book', 'authors'));
     }
 
 
@@ -42,10 +44,11 @@ class BookController extends Controller
      */
     public function update(BookRequest $request, Book $book): RedirectResponse
     {
-
         $book->update($request->only(['title', 'price', 'published']));
 
-        return  redirect(route('books.index'))->with('success');
+        $book->authors()->sync(array_values($request->input('authors')));
+
+        return redirect(route('books.index'))->with('success');
     }
 
 

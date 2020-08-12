@@ -23,10 +23,11 @@ class BookRequest extends FormRequest
      */
     public function rules()
     {
-        return  [
-            'title'   => ['required', 'string'],
-            'price'    => ['required', 'numeric','min:0', 'not_in:0'],
-            'published'  => ['required', 'date'],
+        return [
+            'title' => ['required', 'string'],
+            'price' => ['required', 'numeric', 'min:0', 'not_in:0'],
+            'published' => ['required', 'date'],
+            'authors' => ['required', 'array', 'min:1'],
         ];
     }
 }
