@@ -1,0 +1,66 @@
+version: '3.7'
+
+
+services:
+  web:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/templates:/etc/nginx/templates
+      - .:/var/www/app:cached
+    environment:
+      NGINX_ENVSUBST_TEMPLATE_DIR: /etc/nginx/templates
+      NGINX_ENVSUBST_TEMPLATE_SUFFIX: .nginx
+      NGINX_ENVSUBST_OUTPUT_DIR: /etc/nginx/conf.d
+    depends_on:
+      - php
+      - database
+
+  database:
+    image: postgres:12-alpine
+    container_name: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: webmaster
+      POSTGRES_USER: webmaster
+      POSTGRES_DB: etodo
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+  php:
+    build:
+      context: .
+      dockerfile: docker/php.dockerfile
+    container_name: php
+    volumes:
+      - .:/var/www/app:cached
+    ports:
+      - "9000:9000"
+
+  yarn:
+    image: node:latest
+    container_name: yarn
+    volumes:
+      - .:/var/www/app:cached
+    working_dir: /var/www/app
+    entrypoint: ['yarn']
+
+  artisan:
+    build:
+      context: .
+      dockerfile: docker/php.dockerfile
+    container_name: artisan
+    volumes:
+      - .:/var/www/app
+    depends_on:
+      - database
+    working_dir: /var/www/app
+    entrypoint: ['php', '/var/www/app/artisan']
+
+volumes:
+  database:
+    driver: 'local'
