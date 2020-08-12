@@ -9,6 +9,6 @@ $factory->define(Book::class, static function (Faker $faker) {
     return [
         'title' => $faker->sentence,
         'price' => $faker->numberBetween(500, 2000),
-        'published' => $faker->date('Y-m-d', '-2 weeks'),
+        'published' => $faker->dateTimeBetween('-2 years', '-2 weeks'),
     ];
 });
