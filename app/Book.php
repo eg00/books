@@ -23,6 +23,14 @@ class Book extends Model
     protected $dates = ['published'];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['names'];
+
+
+    /**
      * @return BelongsToMany
      */
     public function authors(): BelongsToMany
@@ -34,5 +42,14 @@ class Book extends Model
     {
         $fmt = new NumberFormatter(config('app.locale'), NumberFormatter::CURRENCY);
         return $fmt->formatCurrency($this->price, config('app.currency', "USD"));
+    }
+
+    public function getNamesAttribute()
+    {
+        $names = [];
+        foreach ($this->authors as $author) {
+            $names[] = $author->full_name;
+        }
+        return $names;
     }
 }

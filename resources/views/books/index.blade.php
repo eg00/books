@@ -29,8 +29,8 @@
                             <td><a href="{{route('books.show', $book)}}">{{$book->title}}</a></td>
                             <td>{{$book->formatted_price}}</td>
                             <td>
-                                @foreach($book->authors as $author)
-                                    {{$author->full_name}}
+                                @foreach($book->names as $name)
+                                    {{$name}}
                                     {!! $loop->remaining? "<br>" : ''!!}
                                 @endforeach
                             </td>

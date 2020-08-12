@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', static fn () => view('welcome'));
-Route::resource('books', 'BookController');
-Route::resource('authors', 'AuthorController');
+Route::resource('books', 'BookController')->only(['index', 'show', 'update']);
+Route::resource('authors', 'AuthorController')->only(['index', 'show', 'update']);
