@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Author;
+use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
@@ -27,5 +28,26 @@ class AuthorController extends Controller
     {
         return response()->view('authors.show', compact('author'));
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Author $author
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(Request $request, Author $author)
+    {
+        $this->validate($request, [
+            'full_name' => 'required',
+        ]);
+
+        $author->full_name = $request->full_name;
+        $author->save();
+
+        return redirect(route('authors.index'))->with('success');
+    }
+
 
 }
