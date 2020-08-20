@@ -1,61 +1,69 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# **Интерфейс управления 2 сущностями: Авторы и Книги**
+<details>
+**Задача:**
+Необходимо разработать интерфейс управления 2 сущностями: Авторы и Книги.
+Интерфейс должен иметь соответственно отдельный раздел на каждую сущность. Раздел должен состоять из страницы со списком элементов сущности и страницы с редактированием конкретного элемента. Все поля сущностей должны выводиться на всех страницах разделов.
+Поля сущности Авторы:
+-  ФИО - текстовое, обязательное.
+-  Количество книг - целое число, автоматически вычисляемое по кол-ву привязанных к автору книг.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Поля сущности Книги:
+-  Название - текстовое, обязательное.
+-  Цена - натуральное число, обязательное, больше 0.
+-  Автор - связанная сущность “Авторы”, многое ко многим, обязательное.
+-  Дата публикации - дата, обязательное.
 
-## About Laravel
+Помимо интерфейса нужно реализовать RESTful API с выдачей результатов в формате JSON:
+1. GET /api/v1/books/list - получение списка Книг с ФИО Автора
+2. GET /api/v1/books/find - получение данных Книги по id
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Также необходимо реализовать консольный скрипт, который во время запуска удалял бы Книги, опубликованные более года назад.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Требования:**
+1. Для реализации задачи рекомендуется использовать любой современный фреймворк, в идеале микрофреймворк.
+2. Допускается использование любой базы данных, это может быть хоть MySQL, хоть MongoDB.
+3. Для реализации фронтэнд части можно использовать любой готовый HTML шаблон, Bootstrap.
+4. Кодировка базы данных, исходников скриптов - UTF-8.
+<summary><ins>Задание</ins></summary>
+</details>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+## Демо
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+https://books.2ql.ru/
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Установка и запуск
 
-## Laravel Sponsors
+```shell
+    git clone git clone https://github.com/eg00/books.git
+    cd books
+    cp .env.example .env
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### в локальной среде:
 
-### Premium Partners
+```shell
+    composer install
+    php artisan key:generate
+    php artisan serve
+```
+**Настроить параметры БД в файле .env** 
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+```shell
+   php artisan migrate:fresh --seed
+```
 
-## Contributing
+### при использовании docker
+```shell
+docker-compose up -d
+docker exec -it php composer install
+docker exec -it php ./artisan key:generate
+docker exec -it php ./artisan migrate:fresh --seed
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Удаление книг
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```shell
+php ./artisan books:cleanup"
+```
